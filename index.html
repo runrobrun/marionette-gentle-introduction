@@ -41,7 +41,15 @@
       ContactManager.Contact = Backbone.Model.extend({});
       
       ContactManager.ContactView = Backbone.Marionette.ItemView.extend({
-        template: "#contact-template"
+        template: "#contact-template",
+        
+        events: {
+          "click p": "alertPhoneNumber"
+        },
+        
+        alertPhoneNumber: function(){
+          alert(this.model.escape("phone_number"));
+        }
       });
 
       ContactManager.on("initialize:after", function(){
