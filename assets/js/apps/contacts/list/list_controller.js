@@ -7,6 +7,10 @@ Backbone, Marionette, $, _){
         var contacts_list_view = new List.ContactsView({
           collection: contacts
         });
+
+        contacts_list_view.on("itemview:contact:delete", function(childView, model){
+          contacts.remove(model);
+        });
         
         ContactManager.mainRegion.show(contacts_list_view);
       }
