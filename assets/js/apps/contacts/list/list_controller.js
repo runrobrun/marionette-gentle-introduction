@@ -1,11 +1,14 @@
-ContactManager.module('ContactsApp.List', function(List, ContactManager,
-Backbone, Marionette, $, _){
+ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbone, Marionette, $, _){
     List.Controller = {
       listContacts: function(){
         var contacts = ContactManager.request("contact:entities");
         
         var contacts_list_view = new List.ContactsView({
           collection: contacts
+        });
+
+        contacts_list_view.on("itemview:contact:show", function(childView, model){
+          ContactManager.ContactsApp.Show.Controller.showContact(model);
         });
 
         contacts_list_view.on("itemview:contact:delete", function(childView, model){

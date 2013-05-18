@@ -10,9 +10,9 @@ ContactManager.module('Entities', function(Entities, ContactManager, Backbone, M
   
   var initializeContacts = function(){
     contacts = new Entities.ContactCollection([
-      { id: 1, first_name: 'Alice', last_name: 'Arten' },
-      { id: 2, first_name: 'Bob', last_name: 'Brigham' },
-      { id: 3, first_name: 'Charlie', last_name: 'Campbell' }
+      { id: 1, first_name: 'Alice', last_name: 'Arten', phone_number: '555-0184' },
+      { id: 2, first_name: 'Bob', last_name: 'Brigham', phone_number: '555-0163' },
+      { id: 3, first_name: 'Charlie', last_name: 'Campbell', phone_number: '555-0129' }
     ]);
   };
   
