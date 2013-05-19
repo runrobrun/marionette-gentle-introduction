@@ -8,7 +8,7 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
       });
 
       contacts_list_view.on("itemview:contact:show", function(childView, model){
-        ContactManager.ContactsApp.Show.Controller.showContact(model);
+        ContactManager.trigger("contact:show", model.get('id'));
       });
 
       contacts_list_view.on("itemview:contact:delete", function(childView, model){
