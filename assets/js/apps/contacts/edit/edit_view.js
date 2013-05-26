@@ -8,7 +8,31 @@ ContactManager.module('ContactsApp.Edit', function(Edit, ContactManager, Backbon
     
     updateContact: function(e){
       e.preventDefault();
-      console.log("edit contact");
+      var data = Backbone.Syphon.serialize(this);
+      this.trigger("form:submit", data);
+    },
+
+    onFormDataInvalid: function(errors){
+      var $view = this.$el;
+
+      var clearFormErrors = function(){
+        var $form = $view.find("form");
+        $form.find(".help-inline.error").each(function(){
+          $(this).remove();
+        });
+        $form.find(".control-group.error").each(function(){
+          $(this).removeClass("error");
+        });
+      }
+
+      var markErrors = function(value, key){
+        var $control_group = $view.find("#contact_" + key).parent();
+        var $error_el = $('<span>', { class: "help-inline error", text: value });
+        $control_group.append($error_el).addClass("error");
+      }
+
+      clearFormErrors();
+      _.each(errors, markErrors);
     }
   });
 });
