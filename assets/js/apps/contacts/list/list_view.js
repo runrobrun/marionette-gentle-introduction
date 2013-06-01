@@ -16,7 +16,7 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
     },
     
     newContact: function(){
-      console.log("new contact to be created");
+      this.trigger("contact:new");
     }
   });
   
@@ -74,6 +74,20 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
     className: "table table-hover",
     template: "#contact-list",
     itemView: List.ContactItemView,
-    itemViewContainer: "tbody"
+    itemViewContainer: "tbody",
+
+    initialize: function(){
+      this.listenTo(this.collection, "reset", function(){
+        this.appendHtml = function(collectionView, itemView, index){
+          collectionView.$el.append(itemView.el);
+        }
+      });
+    },
+
+    onCompositeCollectionRendered: function(){
+      this.appendHtml = function(collectionView, itemView, index){
+        collectionView.$el.prepend(itemView.el);
+      }
+    }
   });
 });

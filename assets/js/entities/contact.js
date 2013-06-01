@@ -2,6 +2,12 @@ ContactManager.module('Entities', function(Entities, ContactManager, Backbone, M
   Entities.Contact = Backbone.Model.extend({
     urlRoot: "contacts",
     
+    defaults: {
+      first_name: '',
+      last_name: '',
+      phone_number: ''
+    },
+    
     validate: function(attrs, options) {
       var errors = {}
       if (! attrs.first_name) {
