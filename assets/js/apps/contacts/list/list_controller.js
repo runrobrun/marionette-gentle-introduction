@@ -23,8 +23,7 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
           var new_contact = new ContactManager.Entities.Contact();
           
           var view = new ContactManager.ContactsApp.New.Contact({
-            model: new_contact,
-            asModal: true
+            model: new_contact
           });
 
           view.on("form:submit", function(data){
@@ -49,8 +48,7 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
         
         contacts_list_view.on("itemview:contact:edit", function(childView, model){
           var view = new ContactManager.ContactsApp.Edit.Contact({
-            model: model,
-            asModal: true
+            model: model
           });
 
           view.on("form:submit", function(data){

@@ -12,7 +12,8 @@ ContactManager.module('ContactsApp.Edit', function(ContactEdit, ContactManager, 
         var view;
         if(contact !== undefined){
           view = new ContactEdit.Contact({
-            model: contact
+            model: contact,
+            generateTitle: true
           });
 
           view.on("form:submit", function(data){
