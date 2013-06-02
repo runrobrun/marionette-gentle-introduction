@@ -10,8 +10,26 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
       var contacts_list_panel = new List.Panel();
 
       $.when(fetching_contacts).done(function(contacts){
+        var filtered_contacts = ContactManager.Entities.FilteredCollection({
+          collection: contacts,
+          filterFunction: function(filterCriterion){
+            var criterion = filterCriterion.toLowerCase();
+            return function(contact){
+              if(contact.get('first_name').toLowerCase().indexOf(criterion) !== -1
+                || contact.get('last_name').toLowerCase().indexOf(criterion) !== -1
+                || contact.get('phone_number').toLowerCase().indexOf(criterion) !== -1){
+                  return contact;
+              }
+            };
+          }
+        });
+
         var contacts_list_view = new List.ContactsView({
-          collection: contacts
+          collection: filtered_contacts
+        });
+
+        contacts_list_panel.on("contacts:filter", function(filterCriterion){
+          filtered_contacts.filter(filterCriterion);
         });
 
         contacts_list_layout.on("show", function(){
@@ -32,7 +50,12 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
             if(new_contact.save(data)){
               contacts.add(new_contact);
               ContactManager.dialogRegion.close();
-              contacts_list_view.children.findByModel(new_contact).flash("success");
+              var new_contact_view_diplayed = contacts_list_view.children.findByModel(new_contact);
+              // check whether the new contact view is displayed (it could be
+              // invisible due to the current filter criterion)
+              if(new_contact_view_diplayed){
+                new_contact_view_diplayed.flash("success");
+              }
             }
             else{
               view.triggerMethod("form:data:invalid", new_contact.validationError);

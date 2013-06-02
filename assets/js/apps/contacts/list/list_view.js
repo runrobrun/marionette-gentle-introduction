@@ -12,11 +12,17 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
     template: "#contact_list_panel",
     
     events: {
-      'click button.js-new': 'newContact'
+      'click button.js-new': 'newContact',
+      'click button.js-filter': 'filterContacts'
     },
     
     newContact: function(){
       this.trigger("contact:new");
+    },
+
+    filterContacts: function(){
+      var criterion = this.$el.find(".js-filter-criterion").val();
+      this.trigger("contacts:filter", criterion);
     }
   });
   
