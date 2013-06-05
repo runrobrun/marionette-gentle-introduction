@@ -16,13 +16,21 @@ ContactManager.module('ContactsApp.List', function(List, ContactManager, Backbon
       'click button.js-filter': 'filterContacts'
     },
     
+    ui: {
+      criterion: "input.js-filter-criterion"
+    },
+
     newContact: function(){
       this.trigger("contact:new");
     },
 
     filterContacts: function(){
-      var criterion = this.$el.find(".js-filter-criterion").val();
+      var criterion = $(this.ui.criterion).val();
       this.trigger("contacts:filter", criterion);
+    },
+
+    onSetFilterCriterion: function(criterion){
+      $(this.ui.criterion).val(criterion);
     }
   });
   
