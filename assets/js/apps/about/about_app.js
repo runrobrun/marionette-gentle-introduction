@@ -8,6 +8,7 @@ ContactManager.module('AboutApp', function(AboutApp, ContactManager, Backbone, M
   var API = {
     showAbout: function(){
       AboutApp.Show.Controller.showAbout();
+      ContactManager.HeaderApp.List.Controller.setActiveHeader("about");
     }
   };
 
