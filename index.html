@@ -42,12 +42,18 @@
 
       ContactManager.ContactCollection = Backbone.Collection.extend({
         model: ContactManager.Contact,
-        comparator: "firstName"
+        comparator: function(contact) {
+          return contact.get("firstName") + " " + contact.get("lastName");
+        }
       });
 
       ContactManager.ContactItemView = Marionette.ItemView.extend({
         tagName: "li",
-        template: "#contact-list-item"
+        template: "#contact-list-item",
+        events: {"click p" : "alertPhone"},
+        alertPhone: function() {
+          console.log("Hey, " + this.model.escape("firstName") + " " + this.model.escape("lastName") + "! Your phone number is: " + this.model.escape("phoneNumber"));
+        }
       });
 
       ContactManager.ContactsView = Marionette.CollectionView.extend({
@@ -58,9 +64,19 @@
       ContactManager.on("start", function(){
         var contacts = new ContactManager.ContactCollection([
           {
+            firstName: "Alice",
+            lastName: "Tampen",
+            phoneNumber: "641-660-2699"
+          },
+          {
             firstName: "Bob",
             lastName: "Brigham",
             phoneNumber: "555-0163"
+          },
+          {
+            firstName: "Alice",
+            lastName: "Artsy",
+            phoneNumber: "555-1111"
           },
           {
             firstName: "Alice",
@@ -71,6 +87,11 @@
             firstName: "Charlie",
             lastName: "Campbell",
             phoneNumber: "555-0129"
+          },
+          {
+            firstName: "Alice",
+            lastName: "smith",
+            phoneNumber: "555-1122"
           }
         ]);
 
