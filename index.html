@@ -1,106 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Marionette Contact Manager</title>
-    <link href="./assets/css/bootstrap.css" rel="stylesheet">
-    <link href="./assets/css/application.css" rel="stylesheet">
-  </head>
-
-  <body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <span class="brand">Contact manager</span>
-        </div>
-      </div>
+<head>
+  <meta charset="utf-8">
+  <title>Marionette Contact Manager</title>
+  <link href="./assets/css/bootstrap.css" rel="stylesheet">
+  <link href="./assets/css/application.css" rel="stylesheet">
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <span class="brand">Contact manager</span>
     </div>
+  </div>
+</div>
 
-    <div id="main-region" class="container">
-      <p>Here is static content in the web page. You'll notice that it gets replaced by our app as soon as we start it.</p>
-    </div>
+<div id="main-region" class="container">
+  <p>Here is static content in the web page. You'll notice that it gets replaced by our app as soon as we start it.</p>
+</div>
 
-    <script type="text/template" id="contact-list-item">
-      <p><%- firstName %> <%- lastName %></p>
-    </script>
+<script type="text/template" id="contact-list-item">
+  <p><%- firstName %> <%- lastName %></p>
+</script>
 
-    <script src="./assets/js/vendor/jquery.js"></script>
-    <script src="./assets/js/vendor/json2.js"></script>
-    <script src="./assets/js/vendor/underscore.js"></script>
-    <script src="./assets/js/vendor/backbone.js"></script>
-    <script src="./assets/js/vendor/backbone.marionette.js"></script>
+<script src="./assets/js/vendor/jquery.js"></script>
+<script src="./assets/js/vendor/json2.js"></script>
+<script src="./assets/js/vendor/underscore.js"></script>
+<script src="./assets/js/vendor/backbone.js"></script>
+<script src="./assets/js/vendor/backbone.marionette.js"></script>
 
-    <script src="./assets/js/app.js"></script>
+<script src="./assets/js/app.js"></script>
+<script src="./assets/js/entities/contact.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
+  ContactManager.ContactItemView = Marionette.ItemView.extend({
+    tagName: "li",
+    template: "#contact-list-item",
+    events: {"click p" : "alertPhone"},
+    alertPhone: function() {
+      console.log("Hey, " + this.model.escape("firstName") + " " + this.model.escape("lastName") + "! Your phone number is: " + this.model.escape("phoneNumber"));
+    }
+  });
 
-      ContactManager.Contact = Backbone.Model.extend({});
+  ContactManager.ContactsView = Marionette.CollectionView.extend({
+    tagName: "ul",
+    childView: ContactManager.ContactItemView
+  });
 
-      ContactManager.ContactCollection = Backbone.Collection.extend({
-        model: ContactManager.Contact,
-        comparator: function(contact) {
-          return contact.get("firstName") + " " + contact.get("lastName");
-        }
-      });
+  ContactManager.on("start", function(){
+    var contacts = ContactManager.request("contact:entities");
 
-      ContactManager.ContactItemView = Marionette.ItemView.extend({
-        tagName: "li",
-        template: "#contact-list-item",
-        events: {"click p" : "alertPhone"},
-        alertPhone: function() {
-          console.log("Hey, " + this.model.escape("firstName") + " " + this.model.escape("lastName") + "! Your phone number is: " + this.model.escape("phoneNumber"));
-        }
-      });
+    var contactsView = new ContactManager.ContactsView({
+      collection: contacts
+    });
 
-      ContactManager.ContactsView = Marionette.CollectionView.extend({
-        tagName: "ul",
-        childView: ContactManager.ContactItemView
-      });
+    ContactManager.mainRegion.show(contactsView);
+  });
 
-      ContactManager.on("start", function(){
-        var contacts = new ContactManager.ContactCollection([
-          {
-            firstName: "Alice",
-            lastName: "Tampen",
-            phoneNumber: "641-660-2699"
-          },
-          {
-            firstName: "Bob",
-            lastName: "Brigham",
-            phoneNumber: "555-0163"
-          },
-          {
-            firstName: "Alice",
-            lastName: "Artsy",
-            phoneNumber: "555-1111"
-          },
-          {
-            firstName: "Alice",
-            lastName: "Arten",
-            phoneNumber: "555-0184"
-          },
-          {
-            firstName: "Charlie",
-            lastName: "Campbell",
-            phoneNumber: "555-0129"
-          },
-          {
-            firstName: "Alice",
-            lastName: "smith",
-            phoneNumber: "555-1122"
-          }
-        ]);
-
-        var contactsView = new ContactManager.ContactsView({
-          collection: contacts
-        });
-
-        ContactManager.mainRegion.show(contactsView);
-      });
-
-      ContactManager.start();
-    </script>
-  </body>
+  ContactManager.start();
+</script>
+</body>
 </html>
